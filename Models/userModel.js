@@ -67,8 +67,14 @@ const userSchema = mongoose.Schema({
     default: true,
   },
   photo: String,
-  cnicPhoto: String,
+  cnicFrontPhoto: String,
+  cnicBackPhoto: String,
+  barAssociationFront: String,
+  barAssociationBack: String,
   billPhoto: String,
+  passwordChangeAt: Date,
+  passwordResetExpires: Date,
+  passwordResetToken: String,
 });
 
 // this middleware Dont select the NON_ACTIVE users
@@ -89,6 +95,28 @@ userSchema.methods.correctPassword = async function (
   userPassword
 ) {
   return bcyrpt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changePasswordAfter = (JWTTimeStamp) => {
+  if (!this.passwordChangeAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangeAt.getTime() / 1000,
+      10
+    );
+    return JWTTimeStamp < changedTimeStamp;
+  }
+
+  return false;
+};
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('SHA256')
+    .update(resetToken)
+    .digest('hex');
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  return resetToken;
 };
 
 const User = mongoose.model('User', userSchema);

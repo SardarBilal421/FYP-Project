@@ -1,0 +1,26 @@
+[
+  {
+    "cardKey": "1",
+    "image": " vehiclesAgreement",
+    "title": "Vehicles Sale Agreement",
+    "desc": "Some quick example text to build on the card title and make up the bulk of the card's content."
+  },
+  {
+    "cardKey": "2",
+    "image": "propertyAgreement",
+    "title": "Property Sale Agreement",
+    "desc": "Some quick example text to build on the card title and make up the bulk of the card's content."
+  },
+  {
+    "cardKey": "3",
+    "image": "rentAgreement",
+    "title": "Property Rent Agreement",
+    "desc": "Some quick example text to build on the card title and make up the bulk of the card's content."
+  },
+  {
+    "cardKey": "4",
+    "image": "rentAgreement",
+    "title": "Property Rent Agreement",
+    "desc": "Some quick example text to build on the card title and make up the bulk of the card's content."
+  }
+]

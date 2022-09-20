@@ -9,7 +9,7 @@ router.route('/signup').post(authController.signUp);
 
 router
   .route('/:id')
-  .get(userContrller.getUserById)
+  .get(authController.protect, userContrller.getUserById)
   .patch(userContrller.updateUser)
   .delete(userContrller.deleteUser);
 
