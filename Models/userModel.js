@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcyrpt = require('bcrypt');
+const crypto = require('crypto');
 
 const userSchema = mongoose.Schema({
   firstName: {
@@ -85,6 +86,8 @@ userSchema.pre(/^find/, function (next) {
 
 // encrypt PASSWORD before saveing to database
 userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
   this.password = await bcyrpt.hash(this.password, 12);
   this.passwordConfirm = undefined;
 });
