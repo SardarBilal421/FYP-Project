@@ -8,10 +8,10 @@ router.post('/forgetPassword', authController.forgetPassword);
 
 router.get('/login', authController.logInUser);
 router.route('/signup').post(authController.signUp);
-
+router.use(authController.protect);
 router
   .route('/:id')
-  .get(authController.protect, userContrller.getUserById)
+  .get(userContrller.getUserById)
   .patch(userContrller.updateUser)
   .delete(userContrller.deleteUser);
 
