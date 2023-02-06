@@ -86,6 +86,7 @@ exports.logInUser = catchAsync(async (req, res, next) => {
     status: 'success',
     token,
     user_id: user._id,
+    role: user.role,
   });
 });
 

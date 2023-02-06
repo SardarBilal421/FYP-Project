@@ -57,6 +57,9 @@ const userSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  dob: {
+    type: Date,
+  },
   role: {
     type: String,
     enum: ['admin', 'user', 'laywer'],
@@ -67,6 +70,7 @@ const userSchema = mongoose.Schema({
     select: false,
     default: true,
   },
+
   photo: [String],
   cnicPhoto: [String],
   barAssociation: [[String]],
@@ -74,6 +78,7 @@ const userSchema = mongoose.Schema({
   passwordChangeAt: Date,
   passwordResetExpires: Date,
   passwordResetToken: String,
+  stamp: [String],
 });
 
 // this middleware Dont select the NON_ACTIVE users

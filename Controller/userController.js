@@ -2,9 +2,10 @@ const User = require('./../Models/userModel');
 const appError = require('./../utilities/appError');
 const FeaturesAPI = require('./../utilities/features');
 const catchAsync = require('../utilities/catchAsync');
-
+const PDFDocument = require('pdfkit');
 const sharp = require('sharp');
 const multer = require('multer');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -55,6 +56,7 @@ exports.resizePicture = catchAsync(async (req, res, next) => {
   );
   next();
 });
+
 exports.resizeCnicPicture = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
 
@@ -71,6 +73,7 @@ exports.resizeCnicPicture = catchAsync(async (req, res, next) => {
   );
   next();
 });
+
 exports.resizeBillPicture = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
 
@@ -87,6 +90,7 @@ exports.resizeBillPicture = catchAsync(async (req, res, next) => {
   );
   next();
 });
+
 exports.resizeBarPicture = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
 
@@ -116,7 +120,7 @@ exports.uploaded = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    massage: 'Picture Uploaded',
+    massage: 'Uploaded',
   });
 });
 
@@ -132,6 +136,7 @@ exports.getUserById = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.updateUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -147,6 +152,7 @@ exports.updateUser = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 exports.deleteUser = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, { isActive: false });
 
@@ -155,5 +161,51 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   res.status(201).json({
     status: 'success',
     massage: 'User is Deleted',
+  });
+});
+
+const multerStorages = multer.memoryStorage();
+
+const multerFilters = (req, file, cb) => {
+  if (file.mimetype.includes('pdf')) {
+    cb(null, true);
+  } else {
+    cb(new appError('Not an image please uplaod an Image', 400), false);
+  }
+};
+
+const uploaded = multer({
+  storage: multerStorages,
+  fileFilter: multerFilters,
+});
+
+exports.uploadPdf = uploaded.array('stamp');
+
+exports.resizePdf = catchAsync(async (req, res, next) => {
+  if (!req.files) return next();
+
+  req.body.stamp = [];
+  const filename = `user-stampPdf-${req.params.id}-${Date.now()}-${1}.pdf`;
+  const pdfButtfer = Buffer.from(req.files[0].buffer);
+  fs.writeFileSync(`public/pdf/${filename}`, pdfButtfer);
+
+  const user = await User.findById(req.params.id);
+  req.body.stamp.push(filename, ...user.stamp);
+  console.log(req.body.stamp);
+
+  next();
+});
+
+exports.getAll = catchAsync(async (req, res, next) => {
+  const user = await User.find();
+
+  if (!user) {
+    return next(new appError('no record found', 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
   });
 });

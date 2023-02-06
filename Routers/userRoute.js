@@ -28,6 +28,12 @@ router.post(
   userContrller.resizeBarPicture,
   userContrller.uploaded
 );
+router.post(
+  '/pdf/:id',
+  userContrller.uploadPdf,
+  userContrller.resizePdf,
+  userContrller.uploaded
+);
 
 router.post('/forgetPassword', authController.forgetPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
@@ -35,6 +41,7 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 router.post('/login', authController.logInUser);
 router.route('/signup').post(authController.signUp);
 
+router.get('/', userContrller.getAll);
 // router.use(authController.protect);
 router
   .route('/:id')
