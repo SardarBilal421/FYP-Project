@@ -4,11 +4,38 @@ const userContrller = require('./../Controller/userController');
 
 const router = express.Router();
 
-router.post('/forgetPassword', authController.forgetPassword);
+router.post(
+  '/uploadUserPhoto/:id',
+  userContrller.uploadUserPicDir,
+  userContrller.resizePicture,
+  userContrller.uploaded
+);
+router.post(
+  '/uploadCnic/:id',
+  userContrller.uploadCnicPicDir,
+  userContrller.resizeCnicPicture,
+  userContrller.uploaded
+);
+router.post(
+  '/uploadBill/:id',
+  userContrller.uploadBillPicDir,
+  userContrller.resizeBillPicture,
+  userContrller.uploaded
+);
+router.post(
+  '/uploadBarAss/:id',
+  userContrller.uploadBarAssPicDir,
+  userContrller.resizeBarPicture,
+  userContrller.uploaded
+);
 
-router.get('/login', authController.logInUser);
+router.post('/forgetPassword', authController.forgetPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
+
+router.post('/login', authController.logInUser);
 router.route('/signup').post(authController.signUp);
-router.use(authController.protect);
+
+// router.use(authController.protect);
 router
   .route('/:id')
   .get(userContrller.getUserById)
