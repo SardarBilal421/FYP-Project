@@ -62,7 +62,7 @@ const userSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'user', 'laywer'],
+    enum: ['admin', 'user', 'lawyer'],
     default: 'user',
   },
   isActive: {
@@ -78,6 +78,10 @@ const userSchema = mongoose.Schema({
   passwordChangeAt: Date,
   passwordResetExpires: Date,
   passwordResetToken: String,
+  verificationCode: {
+    type: Number,
+    default: Math.floor(Math.random() * 9000 + 1000),
+  },
   stamp: [String],
 });
 

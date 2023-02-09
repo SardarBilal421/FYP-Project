@@ -103,6 +103,42 @@ exports.restrictTo = (...roles) => {
   };
 };
 
+exports.sendVerificationCode = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new appError('THere is no user with such Emaill::', 404));
+  }
+
+  //send it to user Email
+  const message = `Your 4 digits verification code is ::${user.verificationCode}.`;
+
+  try {
+    await sendEmail({
+      email: req.body.email,
+      subject: 'Verification code',
+      message,
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'Code sended to Email',
+    });
+  } catch (err) {
+    return next(new appError('there is an error sending you EMAIL'), 500);
+  }
+});
+
+exports.verifyVerificationCode = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({
+    email: req.body.email,
+    verificationCode: req.params.code,
+  });
+  if (!user) {
+    return next(new appError('THere is no user with such Emaill::', 404));
+  }
+
+  createSendToken(user, 201, res);
+});
+
 exports.forgetPassword = catchAsync(async (req, res, next) => {
   //get user based on Posted Email
   const user = await User.findOne({ email: req.body.email });
@@ -134,7 +170,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
       message,
     });
     res.status(200).json({
-      status: 'successs',
+      status: 'success',
       message: 'token sended to EMailll',
     });
   } catch (err) {

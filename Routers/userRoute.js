@@ -35,6 +35,12 @@ router.post(
   userContrller.uploaded
 );
 
+router.post('/sendVerificationCode', authController.sendVerificationCode);
+router.post(
+  '/verifyVerificationCode/:code',
+  authController.verifyVerificationCode
+);
+
 router.post('/forgetPassword', authController.forgetPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
