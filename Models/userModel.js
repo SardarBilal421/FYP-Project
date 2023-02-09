@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcyrpt = require('bcrypt');
 const crypto = require('crypto');
+const { rand } = require('elliptic');
 
 const userSchema = mongoose.Schema({
   firstName: {
@@ -80,7 +81,7 @@ const userSchema = mongoose.Schema({
   passwordResetToken: String,
   verificationCode: {
     type: Number,
-    default: Math.floor(Math.random() * 9000 + 1000),
+    default: 0,
   },
   stamp: [String],
 });
@@ -127,6 +128,11 @@ userSchema.methods.createPasswordResetToken = function () {
     .digest('hex');
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
+};
+userSchema.methods.createVerificationToken = function () {
+  const random = Math.floor(Math.random() * 9000 + 1000);
+  this.verificationCode = random;
+  return random;
 };
 
 const User = mongoose.model('User', userSchema);

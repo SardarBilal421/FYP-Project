@@ -104,13 +104,22 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.sendVerificationCode = catchAsync(async (req, res, next) => {
+  // const user = await User.findOne({ email: req.body.email });
+  // if (!user) {
+  //   return next(new appError('THere is no user with such Emaill::', 404));
+  // }
+
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new appError('THere is no user with such Emaill::', 404));
   }
 
+  const userVerificationEmailToken = user.createVerificationToken();
+  await user.save({
+    validateBeforeSave: false,
+  });
   //send it to user Email
-  const message = `Your 4 digits verification code is ::${user.verificationCode}.`;
+  const message = `Your 4 digits verification code is ::${userVerificationEmailToken}.`;
 
   try {
     await sendEmail({
@@ -123,6 +132,8 @@ exports.sendVerificationCode = catchAsync(async (req, res, next) => {
       message: 'Code sended to Email',
     });
   } catch (err) {
+    user.verificationCode = undefined;
+    await user.save({ validateBeforeSave: false });
     return next(new appError('there is an error sending you EMAIL'), 500);
   }
 });
@@ -135,6 +146,9 @@ exports.verifyVerificationCode = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new appError('THere is no user with such Emaill::', 404));
   }
+
+  user.verificationCode = undefined;
+  await user.save({ validateBeforeSave: false });
 
   createSendToken(user, 201, res);
 });
