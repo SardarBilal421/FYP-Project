@@ -12,7 +12,7 @@ const sendEmail = async (option) => {
     },
   });
 
-  //dEFINING THE EMIAL OPTION
+  //DEFINING THE EMIAL OPTION
   const mailOptions = {
     from: 'SardarBilal <rockeykhan142@gmail.com>',
     to: option.email,
