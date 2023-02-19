@@ -3,6 +3,9 @@ const validator = require('validator');
 const bcyrpt = require('bcrypt');
 const crypto = require('crypto');
 const { rand } = require('elliptic');
+const EC = require('elliptic').ec;
+
+const ec = new EC('secp256k1');
 
 const userSchema = mongoose.Schema({
   firstName: {
@@ -71,19 +74,25 @@ const userSchema = mongoose.Schema({
     select: false,
     default: true,
   },
-
-  photo: [String],
-  cnicPhoto: [String],
-  barAssociation: [[String]],
-  billPhoto: [String],
-  passwordChangeAt: Date,
-  passwordResetExpires: Date,
-  passwordResetToken: String,
+  publicKey: {
+    type: String,
+  },
+  privateKey: {
+    type: String,
+    default: Buffer.from(ec.genKeyPair().getPrivate('hex')).toString('base64'),
+  },
   verificationCode: {
     type: Number,
     default: 0,
   },
+  photo: [String],
+  cnicPhoto: [String],
+  barAssociation: [String],
+  billPhoto: [String],
   stamp: [String],
+  passwordChangeAt: Date,
+  passwordResetExpires: Date,
+  passwordResetToken: String,
 });
 
 // this middleware Dont select the NON_ACTIVE users
@@ -98,6 +107,10 @@ userSchema.pre('save', async function (next) {
 
   this.password = await bcyrpt.hash(this.password, 12);
   this.passwordConfirm = undefined;
+});
+
+userSchema.pre('save', async function (next) {
+  this.publicKey = await ec.keyFromPrivate(this.privateKey).getPublic('hex');
 });
 
 // method Check is password is matches the input password or not

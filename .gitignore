@@ -1,3 +1,5 @@
 node_modules/
 FilesData/uploadTempalets.js
 config.env
+encdec.js
+encdec1.js
