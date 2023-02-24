@@ -76,10 +76,19 @@ const userSchema = mongoose.Schema({
   },
   publicKey: {
     type: String,
+    unique: true,
   },
   privateKey: {
     type: String,
-    default: Buffer.from(ec.genKeyPair().getPrivate('hex')).toString('base64'),
+    default: function (v) {
+      let binaryString = Buffer.from(
+        ec.genKeyPair().getPrivate('hex'),
+        'hex'
+      ).toString('binary');
+      base64String = Buffer.from(binaryString, 'binary').toString('base64');
+      return base64String;
+    },
+    unique: true,
   },
   verificationCode: {
     type: Number,

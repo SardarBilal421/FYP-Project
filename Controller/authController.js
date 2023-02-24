@@ -68,6 +68,8 @@ exports.signUp = catchAsync(async (req, res, next) => {
 });
 
 // USER LOG INNN
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
 
 exports.logInUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -87,6 +89,10 @@ exports.logInUser = catchAsync(async (req, res, next) => {
     token,
     user_id: user._id,
     role: user.role,
+    // privateKey: Buffer.from(user.privateKey).toString('hex'),
+    privateKey: user.privateKey,
+    publicKey: user.publicKey,
+    // publicKey1: ec.keyFromPrivate(user.privateKey).getPublic('hex'),
   });
 });
 
