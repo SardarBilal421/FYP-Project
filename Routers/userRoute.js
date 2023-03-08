@@ -1,6 +1,7 @@
 const express = require('express');
 const authController = require('./../Controller/authController');
 const userContrller = require('./../Controller/userController');
+const blockchainController = require('./../Controller/blockchainController');
 
 const router = express.Router();
 
@@ -48,6 +49,8 @@ router.post('/login', authController.logInUser);
 router.route('/signup').post(authController.signUp);
 
 router.get('/', userContrller.getAll);
+
+router.get('/getUserPk/:pk', userContrller.getUserByPk);
 // router.use(authController.protect);
 router
   .route('/:id')

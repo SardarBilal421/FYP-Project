@@ -1,5 +1,7 @@
 const express = require('express');
 const userRouter = require('./Routers/userRoute');
+const stampTransRoutes = require('./Routers/stampTransRoutes');
+const blockchainMining = require('./Routers/blockchainRoutes');
 const appError = require('./utilities/appError');
 const globelErrorConrtoller = require('./Controller/errorController');
 const cors = require('cors');
@@ -15,6 +17,9 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/stampTrans', stampTransRoutes);
+app.use('/api/v1/blockchain', blockchainMining);
+app.use('/public', express.static(`${__dirname}/public`));
 
 app.all('*', (req, res, next) => {
   next(

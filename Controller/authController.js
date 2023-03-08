@@ -83,16 +83,21 @@ exports.logInUser = catchAsync(async (req, res, next) => {
     next(new appError('Input Email or Password in inCorrect', 401));
   }
 
+  // const binaryString = Buffer.from(user.privateKey, 'base64').toString(
+  //   'binary'
+  // );
+  // const hexString = Buffer.from(binaryString, 'binary').toString('hex');
+
+  // console.log(hexString); // Output: "48656c6c6f"
+
   const token = signToken(user._id);
   res.status(201).json({
     status: 'success',
     token,
     user_id: user._id,
     role: user.role,
-    // privateKey: Buffer.from(user.privateKey).toString('hex'),
-    privateKey: user.privateKey,
+    privateKey: atob(user.privateKey),
     publicKey: user.publicKey,
-    // publicKey1: ec.keyFromPrivate(user.privateKey).getPublic('hex'),
   });
 });
 

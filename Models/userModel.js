@@ -4,8 +4,7 @@ const bcyrpt = require('bcrypt');
 const crypto = require('crypto');
 const { rand } = require('elliptic');
 const EC = require('elliptic').ec;
-
-const ec = new EC('secp256k1');
+let ec;
 
 const userSchema = mongoose.Schema({
   firstName: {
@@ -74,20 +73,16 @@ const userSchema = mongoose.Schema({
     select: false,
     default: true,
   },
-  publicKey: {
-    type: String,
-    unique: true,
-  },
   privateKey: {
     type: String,
-    default: function (v) {
-      let binaryString = Buffer.from(
-        ec.genKeyPair().getPrivate('hex'),
-        'hex'
-      ).toString('binary');
-      base64String = Buffer.from(binaryString, 'binary').toString('base64');
-      return base64String;
+    default: function () {
+      ec = new EC('secp256k1');
+      return btoa(ec.genKeyPair().getPrivate('hex'));
     },
+    unique: true,
+  },
+  publicKey: {
+    type: String,
     unique: true,
   },
   verificationCode: {
@@ -119,7 +114,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-  this.publicKey = await ec.keyFromPrivate(this.privateKey).getPublic('hex');
+  this.publicKey = ec.keyFromPrivate(atob(this.privateKey)).getPublic('hex');
 });
 
 // method Check is password is matches the input password or not
