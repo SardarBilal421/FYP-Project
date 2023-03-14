@@ -36,6 +36,8 @@ router.post(
   userContrller.uploaded
 );
 
+router.post('/payment', userContrller.sendTrans);
+
 router.post('/sendVerificationCode', authController.sendVerificationCode);
 router.post(
   '/verifyVerificationCode/:code',

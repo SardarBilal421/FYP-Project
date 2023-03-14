@@ -2,6 +2,7 @@ const User = require('./../Models/userModel');
 const appError = require('./../utilities/appError');
 const FeaturesAPI = require('./../utilities/features');
 const catchAsync = require('../utilities/catchAsync');
+const sendTrans = require('../utilities/stripe');
 const PDFDocument = require('pdfkit');
 const sharp = require('sharp');
 const multer = require('multer');
@@ -229,4 +230,17 @@ exports.getAll = catchAsync(async (req, res, next) => {
       user,
     },
   });
+});
+
+exports.sendTrans = catchAsync(async (req, res, next) => {
+  try {
+    await sendTrans();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Payment sended success fully',
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
