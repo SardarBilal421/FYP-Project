@@ -2,6 +2,7 @@ const express = require('express');
 const userRouter = require('./Routers/userRoute');
 const stampTransRoutes = require('./Routers/stampTransRoutes');
 const blockchainMining = require('./Routers/blockchainRoutes');
+const noticiationRoutes = require('./Routers/notiRoutes');
 const appError = require('./utilities/appError');
 const globelErrorConrtoller = require('./Controller/errorController');
 const cors = require('cors');
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/stampTrans', stampTransRoutes);
 app.use('/api/v1/blockchain', blockchainMining);
+app.use('/api/v1/notification', noticiationRoutes);
 app.use('/public', express.static(`${__dirname}/public`));
 
 app.all('*', (req, res, next) => {

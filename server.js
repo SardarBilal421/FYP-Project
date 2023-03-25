@@ -25,3 +25,20 @@ const port = process.env.PORT;
 const server = app.listen(port, () => {
   console.log('App is runing /.....');
 });
+
+// const io = require('socket.io')(server);
+
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+
+//   socket.on('notification', (data) => {
+//     console.log('notification received:', data);
+//     socket.broadcast.emit('notification', data);
+//   });
+// });
+
+// const notificationData = {
+//   message: 'New notification!',
+// };
+
+// console.log(io.emit('notification', notificationData));

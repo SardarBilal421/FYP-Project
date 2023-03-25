@@ -1,0 +1,557 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "FYPUSERAPIS",
+    "dateExported": "2023-03-25T07:54:13.837Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "0dd175bb-75bf-4519-b6f5-dc6940cddbe8",
+            "name": "Mining",
+            "containerId": "",
+            "created": "2023-02-26T19:41:56.433Z",
+            "sortNum": 5000
+        },
+        {
+            "_id": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "BlockchainAPIS",
+            "containerId": "",
+            "created": "2023-02-25T16:56:05.027Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "UserAPIS",
+            "containerId": "",
+            "created": "2023-02-25T16:57:05.347Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "6101efbb-c352-44aa-b744-f9ac5ebb686e",
+            "name": "Notifications",
+            "containerId": "",
+            "created": "2023-03-24T19:10:43.539Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "ceec9bc2-a3cd-485f-b154-a53e3d04ec2c",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "signInUser",
+            "url": "{{URL}}/api/v1/users/signup/",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2022-08-18T11:26:15.121Z",
+            "modified": "2023-03-24T09:30:27.891Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"firstName\":\"REHMANAA\",\n  \"lastName\":\"S\",\n  \"email\":\"rockeykhan142@gmail.com\",\n  \"password\":\"test1234\",\n  \"passwordConfirm\":\"test1234\",\n  \"cnic\":\"61101-0809923-1\",\n  \"address\":\"ABCcityCountry\",\n  \"gender\":\"male\",\n  \"role\":\"user\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5964d76c-1531-4745-869e-4980d9af0fff",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "blockchain",
+            "url": "{{URL}}/api/v1/stampTrans/04dd7d03c5136e22a6d188f61119504491ff4acd98e81a9c593c9246359a574b18cb9801d7cefdb369d7b1cdf93715af55ffdf7b3f902ebfd3409c902dd27e43b2",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-02-24T19:51:30.710Z",
+            "modified": "2023-03-01T15:16:41.169Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"stamp\": \"hello asdasdadasdasasdasdasdas\",\n  \"publicKey\": \"04a5f5fd8454745c0e148a94c138653e563ab7221b7d685ed8ebfed6b9adc33c619facb32935aba59857796ae2e4080fcc55f7a5eb2dc87ce5060b8820e7aac14f\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6b4d3536-8460-4146-8a9f-11dc72c8e7b8",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "0dd175bb-75bf-4519-b6f5-dc6940cddbe8",
+            "name": "addTransaction",
+            "url": "{{URL}}/api/v1/blockchain/addTransaction",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-02-26T11:40:57.206Z",
+            "modified": "2023-02-26T19:42:03.697Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "bf122655-e894-435b-9fc5-d9651c6c72d3",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "6101efbb-c352-44aa-b744-f9ac5ebb686e",
+            "name": "SendNotifications",
+            "url": "{{URL}}/api/v1/notification/",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-03-24T19:10:35.500Z",
+            "modified": "2023-03-24T19:23:00.082Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"message\": \"Notification ALert for signature\",\n  \"sender\": \"04f3a549999efad9b2d0f53f03a0dae9df784a3751c7d65afc6fd103ddf0960f0bbd8158df7d121c1f1933ad3f1b80b4e215ff29adabdafb48bea8d824798da3d9\",\n  \"reciver\": \"049895b54f3159ae7b8e44f8f5351491d414aa0be5f48864d8d62a1afa698d1ad1b5053e150790eede49e21c55537a529dfebae4c4ca47a2e1da69a873cbffd07e\",\n  \"stamp\": \"This is Stamp Aggrement for Siganture 22\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5e80a2ed-a13a-41d3-9fda-664d7fdabfe1",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "LogInUser",
+            "url": "{{URL}}/api/v1/users/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2022-08-18T13:34:32.257Z",
+            "modified": "2023-03-19T19:21:44.661Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"sardar@gmail.com\",\n  \"password\": \"test1234\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2bd35237-17df-4b4b-b420-197f34f8d448",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "getHalfSignTransactions",
+            "url": "{{URL}}/api/v1/stampTrans/getHalfTrans",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-02-25T16:52:07.916Z",
+            "modified": "2023-02-26T19:42:56.130Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "dd359e37-fe99-4f59-b884-48fc04842b26",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "0dd175bb-75bf-4519-b6f5-dc6940cddbe8",
+            "name": "maining",
+            "url": "{{URL}}/api/v1/blockchain/minigTransactions/0468dc62d0badc31172c90cf45ad44a5e41f6f27e9411d96417b1a9edc15d1a550fbecefc367a24a143685d0c3549e3d9d481780c0d7a5f65b1523bcd34f00605a",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-02-26T16:42:24.737Z",
+            "modified": "2023-02-26T19:42:06.612Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7d9654a6-2fde-4807-9960-3f3876ac75ca",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "GetUserById",
+            "url": "{{URL}}/api/v1/users/62fe247baf0ad73d400f4d88",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2022-08-18T13:41:13.969Z",
+            "modified": "2023-02-25T16:57:10.808Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"asd\":\"asd\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "8f228398-1343-4b36-a625-c902449ec586",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "getUserByPK",
+            "url": "{{URL}}/api/v1/stampTrans/getUserPk/04cfd2b378b7d99330036a936bdcecbd822f1ea170258fcef6dbb10e46a286f17ba4665ea05f73aed76e633bf473f4d2ea8bc9a839f92e7258db76b898a47bd52c",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-02-24T20:16:52.859Z",
+            "modified": "2023-02-26T19:43:05.667Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "fc61a662-cda8-4754-a1f4-26721619cbb9",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "0dd175bb-75bf-4519-b6f5-dc6940cddbe8",
+            "name": "FinindStampsAgainstPublickey",
+            "url": "{{URL}}/api/v1/blockchain/findTransactions/04dd7d03c5136e22a6d188f61119504491ff4acd98e81a9c593c9246359a574b18cb9801d7cefdb369d7b1cdf93715af55ffdf7b3f902ebfd3409c902dd27e43b2",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-02-26T17:18:57.173Z",
+            "modified": "2023-03-01T15:33:16.076Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "10c606b1-a4eb-4a41-b4ff-b9bf43a0cf70",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "DeleteUserById",
+            "url": "{{URL}}/api/v1/users/62fe247baf0ad73d400f4d88",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2022-08-20T07:46:54.595Z",
+            "modified": "2023-02-25T16:57:11.807Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "60d023f3-1bf2-4f64-b8d9-ec997cbf5d73",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "updateUser",
+            "url": "{{URL}}/api/v1/users/62fe247baf0ad73d400f4d88",
+            "method": "PATCH",
+            "sortNum": 50000,
+            "created": "2022-08-20T07:47:42.158Z",
+            "modified": "2023-02-25T16:57:12.735Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"lastName\":\"Rehman1\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2596435e-57fc-4231-9f88-dca503b69226",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "forgetPassword",
+            "url": "{{URL}}/api/v1/users/forgetPassword/",
+            "method": "POST",
+            "sortNum": 60000,
+            "created": "2022-09-25T09:19:41.719Z",
+            "modified": "2023-02-25T16:57:13.711Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"rockeykhan142@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "498f9c81-8ef2-4bfe-9a7e-a961240d2030",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "resetPassword",
+            "url": "",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2023-02-06T07:55:01.866Z",
+            "modified": "2023-02-25T16:57:17.216Z",
+            "headers": []
+        },
+        {
+            "_id": "0993ded2-e7b0-44d9-8c0b-279c16073c6d",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "uploadPhoto",
+            "url": "{{URL}}/api/v1/users/uploadUserPhoto/62fe247baf0ad73d400f4d88",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2023-02-06T08:09:07.489Z",
+            "modified": "2023-02-25T16:57:18.224Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "photo",
+                        "value": "c:\\Users\\rocke\\Desktop\\227636323_524041072671534_540654003076015624_n.jpg"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "799f8296-6497-4ee2-a085-5ff7eac1a964",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "uploadCnic",
+            "url": "{{URL}}/api/v1/users/uploadCnic/62fe247baf0ad73d400f4d88",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-02-06T09:02:42.648Z",
+            "modified": "2023-02-25T16:57:19.373Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "cnicPhoto",
+                        "value": "c:\\Users\\rocke\\Downloads\\WhatsApp Image 2023-01-11 at 2.26.03 PM.jpeg"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "46762777-235b-4acf-9ef0-cb4ad4b127f0",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "BarPhotoUpload",
+            "url": "",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2023-02-06T09:12:17.354Z",
+            "modified": "2023-02-25T16:57:20.369Z",
+            "headers": []
+        },
+        {
+            "_id": "ccdfe1f4-8b15-4578-87e3-b91848c370c3",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "BarPhotoUpload",
+            "url": "{{URL}}/api/v1/users/uploadBarAss/62fe247baf0ad73d400f4d88",
+            "method": "POST",
+            "sortNum": 110000,
+            "created": "2023-02-06T09:12:34.061Z",
+            "modified": "2023-02-25T16:57:21.358Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "barAssociation",
+                        "value": "c:\\Users\\rocke\\Downloads\\WhatsApp Image 2023-01-17 at 4.01.59 PM (2).jpeg"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "8695b76f-32c1-4f12-a0a5-8d345406e5d8",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "BillPhotoUpload",
+            "url": "{{URL}}/api/v1/users/uploadBill/62fe247baf0ad73d400f4d88",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2023-02-06T09:13:41.049Z",
+            "modified": "2023-02-25T16:57:22.589Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "billPhoto",
+                        "value": "c:\\Users\\rocke\\Downloads\\WhatsApp Image 2023-01-04 at 4.32.31 PM.jpeg"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "b68e7f38-901b-449d-8a69-80d2229b807e",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "uploadPDF",
+            "url": "{{URL}}/api/v1/users/pdf/62fe247baf0ad73d400f4d88",
+            "method": "POST",
+            "sortNum": 130000,
+            "created": "2023-02-06T09:47:19.849Z",
+            "modified": "2023-02-25T16:57:23.974Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "stamp",
+                        "value": "c:\\Users\\rocke\\Downloads\\MAHNOOR YAHYA.pdf"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "09f7a8bf-5d80-4424-9d3b-c8abf04e5137",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "getAll",
+            "url": "{{URL}}/api/v1/users/",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2023-02-06T10:35:37.802Z",
+            "modified": "2023-03-01T15:07:14.102Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "publicKey",
+                    "value": "0463473ae90d0f1c1aa0275bd43ef0219a33457e927951aaefa096bfd81e5bb1eea8cc10bfed60cb99504b070193e402a70f92f505a40a5f3cf0fb52f9d019ee1b",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "697c822e-0323-4e29-b3da-0b433b330e6d",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "sending Verfication Code",
+            "url": "{{URL}}/api/v1/users/sendVerificationCode",
+            "method": "POST",
+            "sortNum": 150000,
+            "created": "2023-02-09T11:12:39.311Z",
+            "modified": "2023-02-25T16:57:26.285Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"hussnainraja768@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9bca5261-31ec-4010-828b-33fbdd81ad49",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "verifyCode",
+            "url": "{{URL}}/api/v1/users/verifyVerificationCode/6525",
+            "method": "POST",
+            "sortNum": 160000,
+            "created": "2023-02-09T11:20:39.895Z",
+            "modified": "2023-02-25T16:57:27.300Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"Bilal@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2614bed5-e1d1-42f2-9e8a-cfdf20d4d50f",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "v1Sign",
+            "url": "{{URL}}/api/v1/stampTrans/v1/04dd7d03c5136e22a6d188f61119504491ff4acd98e81a9c593c9246359a574b18cb9801d7cefdb369d7b1cdf93715af55ffdf7b3f902ebfd3409c902dd27e43b2/63ff76adcc0d80b64dc49571",
+            "method": "GET",
+            "sortNum": 170000,
+            "created": "2023-02-25T17:21:57.331Z",
+            "modified": "2023-03-01T16:01:05.268Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8588f84b-9fe0-45a5-983a-bb0d4514c9d5",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "v2Sign",
+            "url": "{{URL}}/api/v1/stampTrans/v2/042d2bbde5832f8d9c3525887b0971fc8d85d897efbc8b7f96159f8efcdf3a1ff90aa78fdb6f0fd56cfa3360dec3483f350b15f582d5eb80bc30ad8b9c0f544d3f/63ff76adcc0d80b64dc49571",
+            "method": "GET",
+            "sortNum": 180000,
+            "created": "2023-02-26T11:10:08.457Z",
+            "modified": "2023-03-01T16:01:14.350Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "c1bc1b67-5931-4f74-8aed-b8527ee82dac",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d71ea884-b031-453f-835c-c3c2ca9a9a0b",
+            "name": "LawyerSign",
+            "url": "{{URL}}/api/v1/stampTrans/lawyer/042d2bbde5832f8d9c3525887b0971fc8d85d897efbc8b7f96159f8efcdf3a1ff90aa78fdb6f0fd56cfa3360dec3483f350b15f582d5eb80bc30ad8b9c0f544d3f/63ff76adcc0d80b64dc49571",
+            "method": "POST",
+            "sortNum": 190000,
+            "created": "2023-02-26T11:28:57.727Z",
+            "modified": "2023-03-01T16:01:21.608Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8aad9913-22f6-43b9-aaa5-cdc98a465948",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "Payment Trans",
+            "url": "{{URL}}/api/v1/users/payment",
+            "method": "POST",
+            "sortNum": 200000,
+            "created": "2023-03-14T18:11:19.318Z",
+            "modified": "2023-03-14T18:11:19.318Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7104f3e4-5824-4988-9319-6f3d861fea62",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "d7bf6fa4-45c4-49ca-856a-8736858519e9",
+            "name": "sendAuthEmail",
+            "url": "{{URL}}/api/v1/users/sendAuthDoc/",
+            "method": "POST",
+            "sortNum": 210000,
+            "created": "2023-03-24T09:36:00.450Z",
+            "modified": "2023-03-24T09:36:37.050Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\":\"rockeykhan142@gmail.com\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "69bbaaec-f020-41c5-8c5d-6a490a3f305b",
+            "colId": "de7db6f1-c661-4c69-a6c8-6ccc411ccd29",
+            "containerId": "6101efbb-c352-44aa-b744-f9ac5ebb686e",
+            "name": "getNotification",
+            "url": "{{URL}}/api/v1/notification/049895b54f3159ae7b8e44f8f5351491d414aa0be5f48864d8d62a1afa698d1ad1b5053e150790eede49e21c55537a529dfebae4c4ca47a2e1da69a873cbffd07e",
+            "method": "GET",
+            "sortNum": 230000,
+            "created": "2023-03-24T19:17:51.113Z",
+            "modified": "2023-03-24T19:18:11.252Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ],
+    "settings": {
+        "headers": [],
+        "tests": [],
+        "envId": "ee2045d3-db6a-4b4b-851e-2b7c408de517"
+    }
+}

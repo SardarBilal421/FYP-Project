@@ -38,6 +38,8 @@ router.post(
 
 router.post('/payment', userContrller.sendTrans);
 
+router.post('/sendAuthDoc', userContrller.sendAuthEmail);
+
 router.post('/sendVerificationCode', authController.sendVerificationCode);
 router.post(
   '/verifyVerificationCode/:code',

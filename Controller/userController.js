@@ -7,6 +7,7 @@ const PDFDocument = require('pdfkit');
 const sharp = require('sharp');
 const multer = require('multer');
 const fs = require('fs');
+const sendEmail = require('./../utilities/email');
 
 // const upload = multer({ storage: storage });
 
@@ -242,5 +243,23 @@ exports.sendTrans = catchAsync(async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
+  }
+});
+
+exports.sendAuthEmail = catchAsync(async (req, res, next) => {
+  const message = `Please open the given link and compelete Required steps for verficiation. \n http://localhost:3000/mediarecorder`;
+
+  try {
+    await sendEmail({
+      email: req.body.email,
+      subject: 'Authentication Email',
+      message,
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'Code sended to Email',
+    });
+  } catch (err) {
+    return next(new appError('there is an error sending you EMAIL'), 500);
   }
 });

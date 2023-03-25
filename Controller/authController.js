@@ -115,11 +115,6 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.sendVerificationCode = catchAsync(async (req, res, next) => {
-  // const user = await User.findOne({ email: req.body.email });
-  // if (!user) {
-  //   return next(new appError('THere is no user with such Emaill::', 404));
-  // }
-
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new appError('THere is no user with such Emaill::', 404));
