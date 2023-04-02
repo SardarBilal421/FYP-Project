@@ -8,6 +8,8 @@ router.post('/', notificationController.sendNotification);
 router.get('/:pk', notificationController.getNotification);
 // // router.use(authController.protect);
 
+router.post('/trans', notificationController.transaction);
+
 // router.route('/:pk').get(notificationController.getNotification);
 //   .patch(userContrller.updateUser)
 //   .delete(userContrller.deleteUser);

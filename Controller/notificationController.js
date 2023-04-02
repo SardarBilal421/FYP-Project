@@ -2,11 +2,12 @@ const Notification = require('./../Models/notificationModel');
 const appError = require('./../utilities/appError');
 const catchAsync = require('../utilities/catchAsync');
 const User = require('./../Models/userModel');
+const sendTrans = require('../utilities/stripe');
 
 exports.sendNotification = catchAsync(async (req, res, next) => {
-  const user = User.find({ publicKey: req.body.reciver });
+  const user = await User.find({ publicKey: req.body.reciever });
 
-  if (!user) {
+  if (user.length <= 0) {
     return next(
       new appError(
         'The User you are trying to send noticiation does not Exist',
@@ -14,8 +15,8 @@ exports.sendNotification = catchAsync(async (req, res, next) => {
       )
     );
   }
-  const noti = await Notification.create(req.body);
 
+  const noti = await Notification.create(req.body);
   if (!noti) {
     return next(new appError('unable to send notification', 404));
   }
@@ -27,16 +28,27 @@ exports.sendNotification = catchAsync(async (req, res, next) => {
 });
 
 exports.getNotification = catchAsync(async (req, res, next) => {
-  const notifiation = await Notification.find({ reciver: req.params.pk });
+  const notification = await Notification.find({ reciever: req.params.pk });
 
-  if (!notifiation) {
+  if (!notification) {
     return next(new appError('this user has no Notifications', 404));
   }
 
   res.status(201).json({
     status: 'success',
+    length: notification.length,
     data: {
-      notifiation,
+      notification,
     },
+  });
+});
+
+exports.transaction = catchAsync(async (req, res, next) => {
+  const trans = await sendTrans();
+  console.log(trans);
+
+  res.status(201).json({
+    status: 'success',
+    Massage: 'Transaction Completed',
   });
 });

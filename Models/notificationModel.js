@@ -7,7 +7,7 @@ const notificationSchema = mongoose.Schema({
   sender: {
     type: String,
   },
-  reciver: {
+  reciever: {
     type: String,
   },
   stamp: {
