@@ -42,6 +42,19 @@ exports.getNotification = catchAsync(async (req, res, next) => {
     },
   });
 });
+exports.deleteNotification = catchAsync(async (req, res, next) => {
+  const notification = await Notification.deleteOne({ _id: req.params.id });
+
+  if (!notification) {
+    return next(new appError('this user has no Notifications', 404));
+  }
+
+  res.status(201).json({
+    status: 'success',
+    // length: notification.length,
+    message: 'Deleted',
+  });
+});
 
 exports.transaction = catchAsync(async (req, res, next) => {
   const trans = await sendTrans();

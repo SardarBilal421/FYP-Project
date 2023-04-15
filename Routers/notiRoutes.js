@@ -6,6 +6,7 @@ const router = express.Router();
 router.post('/', notificationController.sendNotification);
 
 router.get('/:pk', notificationController.getNotification);
+router.delete('/:id', notificationController.deleteNotification);
 // // router.use(authController.protect);
 
 router.post('/trans', notificationController.transaction);
