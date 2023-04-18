@@ -10,8 +10,8 @@ const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
 exports.toFromSignature = catchAsync(async (req, res, next) => {
-  const fromUser = await User.findOne({ publicKey: req.params.pk });
-  const toUser = await User.findOne({ publicKey: req.body.publicKey });
+  const fromUser = await User.findOne({ publicKey: req.body.fromPublicKey });
+  const toUser = await User.findOne({ publicKey: req.body.toPublicKey });
 
   if (!fromUser && !toUser) {
     next(new appError('Please input correct public address', 404));
@@ -27,25 +27,25 @@ exports.toFromSignature = catchAsync(async (req, res, next) => {
   const fromKey = ec.keyFromPrivate(fromPrivateKey);
   const toKey = ec.keyFromPrivate(toPrivateKey);
 
-  // console.log(fromKey.getPublic('hex'));
-  // console.log(fromUser.publicKey);
-  // console.log(atob(fromUser.privateKey));
-  // console.log(fromPrivateKey);
+  console.log(fromKey.getPublic('hex'));
+  console.log(fromUser.publicKey);
+  console.log(atob(fromUser.privateKey));
+  console.log(fromPrivateKey);
 
-  // console.log(toKey.getPublic('hex'));
-  // console.log(toUser.publicKey);
-  // console.log(atob(toUser.privateKey));
-
-  // console.log(toPrivateKey);
+  console.log(toKey.getPublic('hex'));
+  console.log(toUser.publicKey);
+  console.log(atob(toUser.privateKey));
+  console.log(toPrivateKey);
 
   //Converting Plain TEXT into Base64
-  const encryptedStamp = btoa(req.body.stamp);
+  const encryptedStamp = btoa(req.body.stampDetail);
 
   // Transcation
   const tx1 = new Transactions(
     fromKey.getPublic('hex'),
     toKey.getPublic('hex'),
-    encryptedStamp
+    encryptedStamp,
+    req.body.stampName
   );
 
   //Signature of First 2 persons
@@ -112,7 +112,8 @@ exports.V1Signature = catchAsync(async (req, res, next) => {
   const tx1 = new Transactions(
     halfTrans.transaction.fromAddress,
     halfTrans.transaction.toAddress,
-    halfTrans.transaction.amount
+    halfTrans.transaction.stampDetail,
+    halfTrans.transaction.stampName
   );
 
   tx1.signFromTransaction(fromKey);
@@ -192,7 +193,8 @@ exports.V2Signature = catchAsync(async (req, res, next) => {
   const tx1 = new Transactions(
     halfTrans.transaction.fromAddress,
     halfTrans.transaction.toAddress,
-    halfTrans.transaction.amount
+    halfTrans.transaction.stampDetail,
+    halfTrans.transaction.stampName
   );
 
   tx1.signFromTransaction(fromKey);
@@ -301,7 +303,8 @@ exports.lawyerSignature = catchAsync(async (req, res, next) => {
   const tx1 = new Transactions(
     halfTrans.transaction.fromAddress,
     halfTrans.transaction.toAddress,
-    halfTrans.transaction.amount
+    halfTrans.transaction.stampDetail,
+    halfTrans.transaction.stampName
   );
 
   tx1.signFromTransaction(fromKey);
@@ -368,7 +371,6 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
   // for (let index = 2; index > 0; index--) {
   let halfTrans = await HalfSignTrans.find();
   halfTrans = halfTrans[halfTrans.length - 1];
-  // console.log(halfTrans);
 
   if (!halfTrans) {
     next(
@@ -379,13 +381,19 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (Object.keys(halfTrans.transaction).length < 11) {
+  if (
+    Object.keys(halfTrans.transaction).length < 12 ||
+    halfTrans.transaction.stampDetail == undefined ||
+    halfTrans.transaction.stampName == undefined
+  ) {
     const transs = await HalfSignTrans.deleteOne({ _id: halfTrans._id });
-    if (!transs) {
+    if (transs) {
       next(new appError('invalid Transaction \n Transaction deleted', 404));
     }
+
+    console.log('Length Trnas', Object.keys(halfTrans.transaction).length);
   }
-  console.log('Length', Object.keys(halfTrans.transaction).length);
+  // console.log('Length', Object.keys(halfTrans.transaction).length);
 
   const fromUser = await User.findOne({
     publicKey: halfTrans.transaction.fromAddress,
@@ -436,7 +444,8 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
   const tx1 = new Transactions(
     halfTrans.transaction.fromAddress,
     halfTrans.transaction.toAddress,
-    halfTrans.transaction.amount
+    halfTrans.transaction.stampDetail,
+    halfTrans.transaction.stampName
   );
 
   tx1.signFromTransaction(fromKey);
@@ -454,7 +463,7 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
   //   );
   // }
 
-  console.log(sardarCoin.pendingTransactions);
+  console.log('Pending Trnasactions', sardarCoin.pendingTransactions);
 
   res.status(200).json({
     status: 'success',
@@ -492,6 +501,9 @@ exports.minigTransactions = catchAsync(async (req, res, next) => {
 
 exports.findingTransactions = catchAsync(async (req, res, next) => {
   const stamps = sardarCoin.getStampsOfAddress(req.params.pk);
+  stamps.forEach((a) => {
+    a.stampDetail = atob(a.stampDetail);
+  });
 
   res.status(200).json({
     status: 'success',

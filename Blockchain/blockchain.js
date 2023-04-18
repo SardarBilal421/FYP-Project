@@ -3,21 +3,22 @@ const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 
 class Transactions {
-  constructor(fromAddress, toAddress, amount) {
+  constructor(fromAddress, toAddress, stampDetail, stampName) {
     this.fromAddress = fromAddress;
     this.toAddress = toAddress;
-    this.amount = amount;
+    this.stampDetail = stampDetail;
+    this.stampName = stampName;
     this.signature;
   }
 
   calculateHash() {
     return SHA256(
-      this.fromAddress + this.toAddress + this.amount + this.timestamp
+      this.fromAddress + this.toAddress + this.stampDetail + this.timestamp
     ).toString();
 
     //     return crypto
     //       .createHash('sha256')
-    //       .update(this.fromAddress + this.toAddress + this.amount + this.timestamp)
+    //       .update(this.fromAddress + this.toAddress + this.stampDetail + this.timestamp)
     //       .digest('hex');
   }
   signToTransaction(signingKey) {
@@ -241,10 +242,10 @@ class Blockchain {
     for (const block of this.chain) {
       for (const trans of block.transactions) {
         if (trans.fromAddress === address) {
-          balance -= trans.amount;
+          balance -= trans.stampDetail;
         }
         if (trans.toAddress === address) {
-          balance += trans.amount;
+          balance += trans.stampDetail;
         }
       }
     }
@@ -261,7 +262,7 @@ class Blockchain {
         }
         // console.log(typeof trans);
         // if (trans.toAddress === address) {
-        //   balance += trans.amount;
+        //   balance += trans.stampDetail;
         // }
       }
     }
