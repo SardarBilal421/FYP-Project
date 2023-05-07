@@ -114,6 +114,8 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
+  if (!this.isModified('privateKey')) return next();
+
   this.publicKey = ec.keyFromPrivate(atob(this.privateKey)).getPublic('hex');
 });
 

@@ -27,15 +27,15 @@ exports.toFromSignature = catchAsync(async (req, res, next) => {
   const fromKey = ec.keyFromPrivate(fromPrivateKey);
   const toKey = ec.keyFromPrivate(toPrivateKey);
 
-  console.log(fromKey.getPublic('hex'));
-  console.log(fromUser.publicKey);
-  console.log(atob(fromUser.privateKey));
-  console.log(fromPrivateKey);
+  // console.log(fromKey.getPublic('hex'));
+  // console.log(fromUser.publicKey);
+  // console.log(atob(fromUser.privateKey));
+  // console.log(fromPrivateKey);
 
-  console.log(toKey.getPublic('hex'));
-  console.log(toUser.publicKey);
-  console.log(atob(toUser.privateKey));
-  console.log(toPrivateKey);
+  // console.log(toKey.getPublic('hex'));
+  // console.log(toUser.publicKey);
+  // console.log(atob(toUser.privateKey));
+  // console.log(toPrivateKey);
 
   //Converting Plain TEXT into Base64
   const encryptedStamp = btoa(req.body.stampDetail);
@@ -47,6 +47,16 @@ exports.toFromSignature = catchAsync(async (req, res, next) => {
     encryptedStamp,
     req.body.stampName
   );
+
+  fromUser.publicKey = fromKey.getPublic('hex');
+  toUser.publicKey = toKey.getPublic('hex');
+
+  await fromUser.save({
+    validateBeforeSave: false,
+  });
+  await toUser.save({
+    validateBeforeSave: false,
+  });
 
   //Signature of First 2 persons
 
@@ -81,6 +91,7 @@ exports.V1Signature = catchAsync(async (req, res, next) => {
   if (!halfTrans) {
     next(new appError('Transcation you Trying to Sign DOes Not Exist', 404));
   }
+
   //converting base64 Private key into HEX of FROM ADDRESS
   const v1PrivateKey = atob(v1.privateKey);
 
