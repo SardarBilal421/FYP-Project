@@ -8,6 +8,9 @@ const { sardarCoin, Transactions } = require('./../Blockchain/blockchain');
 const fs = require('fs');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
+const PDFDocument = require('pdfkit');
+
+
 
 exports.toFromSignature = catchAsync(async (req, res, next) => {
   const fromUser = await User.findOne({ publicKey: req.body.fromPublicKey });
@@ -380,8 +383,8 @@ exports.halfTrans = catchAsync(async (req, res, next) => {
 exports.addTransaction = catchAsync(async (req, res, next) => {
   // let sardarCoin = new Blockchain();
   // for (let index = 2; index > 0; index--) {
-  let halfTrans = await HalfSignTrans.find();
-  halfTrans = halfTrans[halfTrans.length - 1];
+  let halfTrans = await HalfSignTrans.findById(req.params.pk);
+  // halfTrans = halfTrans[halfTrans.length - 1];
 
   if (!halfTrans) {
     next(
@@ -392,18 +395,18 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (
-    Object.keys(halfTrans.transaction).length < 12 ||
-    halfTrans.transaction.stampDetail == undefined ||
-    halfTrans.transaction.stampName == undefined
-  ) {
-    const transs = await HalfSignTrans.deleteOne({ _id: halfTrans._id });
-    if (transs) {
-      next(new appError('invalid Transaction \n Transaction deleted', 404));
-    }
+  // if (
+  //   Object.keys(halfTrans.transaction).length < 12 ||
+  //   halfTrans.transaction.stampDetail == undefined ||
+  //   halfTrans.transaction.stampName == undefined
+  // ) {
+  //   const transs = await HalfSignTrans.deleteOne({ _id: halfTrans._id });
+  //   if (transs) {
+  //     next(new appError('invalid Transaction \n Transaction deleted', 404));
+  //   }
 
-    console.log('Length Trnas', Object.keys(halfTrans.transaction).length);
-  }
+  //   console.log('Length Trnas', Object.keys(halfTrans.transaction).length);
+  // }
   // console.log('Length', Object.keys(halfTrans.transaction).length);
 
   const fromUser = await User.findOne({
@@ -467,6 +470,11 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
 
   sardarCoin.addTransaction(tx1);
 
+  halfTrans.status = "Minted";
+  await halfTrans.save({
+    validateBeforeSave:false
+  })
+
   // const transs = await HalfSignTrans.deleteOne({ _id: halfTrans._id });
   // if (!transs) {
   //   next(
@@ -478,19 +486,26 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
+    transaction:halfTrans,
 
     data: {
       Message:
         'Your Stamp will be minted Blockchain as soon as possible.. depending on network traffic',
     },
+
   });
 });
+
+
 
 exports.minigTransactions = catchAsync(async (req, res, next) => {
   // console.log(sardarCoin);
   const publicKey = req.params.pk;
   sardarCoin.minePendingTrasactions(publicKey);
   const balance = sardarCoin.getBalanceOfAddress(publicKey);
+
+
+
   // const chain = await Chain.create({ chain: sardarCoin.chain });
   // const chain = await Chain.findOneAndReplace(
   //   { _id: '63ff77e7a2110bcaacc032b0' },
@@ -510,17 +525,81 @@ exports.minigTransactions = catchAsync(async (req, res, next) => {
   });
 });
 
+
 exports.findingTransactions = catchAsync(async (req, res, next) => {
-  const stamps = sardarCoin.getStampsOfAddress(req.params.pk);
-  stamps.forEach((a) => {
-    a.stampDetail = atob(a.stampDetail);
-  });
+  // const stamps = sardarCoin.getStampsOfAddress(req.params.pk);
+  // stamps.forEach((a) => {
+  //   a.stampDetail = atob(a.stampDetail);
+  // });
+
+  const halfTrans = await HalfSignTrans.find({status:"Minted"})
+  if(!halfTrans){
+    next(new appError('You Dont have any Transaction Yet', 404));
+  }
+
+// let a = halfTrans.map((x)=>
+// x.transaction.stampDetail = atob(x.transaction.stampDetail)
+// )
+// console.log(halfTrans)
+
+ let STAMPS =  halfTrans.filter((a)=>{
+ return a.transaction.fromAddress == req.params.pk
+  })
+  
+  STAMPS.map((x)=>{
+    x.transaction.stampDetail = atob(x.transaction.stampDetail)
+  })
+  console.log(STAMPS)
+
 
   res.status(200).json({
     status: 'success',
 
     data: {
-      stamps,
+      STAMPS,
     },
   });
+});
+
+exports.downloadStamp = catchAsync(async (req, res, next) => {
+ 
+
+  const halfTrans = await HalfSignTrans.find({status:"Minted"})
+  if(!halfTrans){
+    next(new appError('You Dont have any Transaction Yet', 404));
+  }
+ let STAMPS =  halfTrans.filter((a)=>{
+ return a.id == req.params.id
+  })
+  const stampDetails = atob( STAMPS[0].transaction.stampDetail)
+
+
+  const doc = new PDFDocument();
+
+
+  doc.fontSize(16).text(stampDetails);
+
+  // create a write stream to save the PDF
+  const writeStream = fs.createWriteStream('example1111.pdf');
+  
+  // pipe the PDF document to the write stream
+  doc.pipe(writeStream);
+  
+  // end the document
+  doc.end();
+
+writeStream.on('finish', () => {
+  const filePath = `example1111.pdf`;
+  const fileName = 'example1111.pdf';
+  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+  res.setHeader('Content-type', 'application/pdf');
+  const filestream = fs.createReadStream(filePath);
+  filestream.pipe(res);
+});
+
+// res.status(200).json({
+//   status: 'success',
+
+//   messages: "PDF generated"
+// });
 });

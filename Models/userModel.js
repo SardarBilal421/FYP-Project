@@ -114,8 +114,9 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
+//   console.log("waja")
   if (!this.isModified('privateKey')) return next();
-
+// console.log("Waja2")
   this.publicKey = ec.keyFromPrivate(atob(this.privateKey)).getPublic('hex');
 });
 
