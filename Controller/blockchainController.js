@@ -698,3 +698,20 @@ exports.downloadStamp = catchAsync(async (req, res, next) => {
   //   messages: "PDF generated"
   // });
 });
+
+exports.getOneStamp = catchAsync(async (req, res, next) => {
+  const halfTrans = await HalfSignTrans.find({ status: 'Minted' });
+  if (!halfTrans) {
+    next(new appError('You Dont have any Transaction Yet', 404));
+  }
+  let STAMPS = halfTrans.filter((a) => {
+    return a.id == req.params.id;
+  });
+
+  STAMPS[0].transaction.stampDetail = atob(STAMPS[0].transaction.stampDetail);
+  res.status(200).json({
+    status: 'success',
+
+    data: STAMPS[0].transaction,
+  });
+});

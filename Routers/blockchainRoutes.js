@@ -8,6 +8,7 @@ router
   .post('/minigTransactions/:pk', blockchainController.minigTransactions);
 router
   .get('/findTransactions/:pk', blockchainController.findingTransactions)
-  .get('/downloadStamp/:id', blockchainController.downloadStamp);
+  .get('/downloadStamp/:id', blockchainController.downloadStamp)
+  .get('/getonestamp/:id', blockchainController.getOneStamp);
 
 module.exports = router;
