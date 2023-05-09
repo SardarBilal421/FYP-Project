@@ -9,8 +9,7 @@ const fs = require('fs');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 const PDFDocument = require('pdfkit');
-
-
+const QRCode = require('qrcode');
 
 exports.toFromSignature = catchAsync(async (req, res, next) => {
   const fromUser = await User.findOne({ publicKey: req.body.fromPublicKey });
@@ -470,10 +469,10 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
 
   sardarCoin.addTransaction(tx1);
 
-  halfTrans.status = "Minted";
+  halfTrans.status = 'Minted';
   await halfTrans.save({
-    validateBeforeSave:false
-  })
+    validateBeforeSave: false,
+  });
 
   // const transs = await HalfSignTrans.deleteOne({ _id: halfTrans._id });
   // if (!transs) {
@@ -486,25 +485,20 @@ exports.addTransaction = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    transaction:halfTrans,
+    transaction: halfTrans,
 
     data: {
       Message:
         'Your Stamp will be minted Blockchain as soon as possible.. depending on network traffic',
     },
-
   });
 });
-
-
 
 exports.minigTransactions = catchAsync(async (req, res, next) => {
   // console.log(sardarCoin);
   const publicKey = req.params.pk;
   sardarCoin.minePendingTrasactions(publicKey);
   const balance = sardarCoin.getBalanceOfAddress(publicKey);
-
-
 
   // const chain = await Chain.create({ chain: sardarCoin.chain });
   // const chain = await Chain.findOneAndReplace(
@@ -525,32 +519,30 @@ exports.minigTransactions = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.findingTransactions = catchAsync(async (req, res, next) => {
   // const stamps = sardarCoin.getStampsOfAddress(req.params.pk);
   // stamps.forEach((a) => {
   //   a.stampDetail = atob(a.stampDetail);
   // });
 
-  const halfTrans = await HalfSignTrans.find({status:"Minted"})
-  if(!halfTrans){
+  const halfTrans = await HalfSignTrans.find({ status: 'Minted' });
+  if (!halfTrans) {
     next(new appError('You Dont have any Transaction Yet', 404));
   }
 
-// let a = halfTrans.map((x)=>
-// x.transaction.stampDetail = atob(x.transaction.stampDetail)
-// )
-// console.log(halfTrans)
+  // let a = halfTrans.map((x)=>
+  // x.transaction.stampDetail = atob(x.transaction.stampDetail)
+  // )
+  // console.log(halfTrans)
 
- let STAMPS =  halfTrans.filter((a)=>{
- return a.transaction.fromAddress == req.params.pk
-  })
-  
-  STAMPS.map((x)=>{
-    x.transaction.stampDetail = atob(x.transaction.stampDetail)
-  })
-  console.log(STAMPS)
+  let STAMPS = halfTrans.filter((a) => {
+    return a.transaction.fromAddress == req.params.pk;
+  });
 
+  STAMPS.map((x) => {
+    x.transaction.stampDetail = atob(x.transaction.stampDetail);
+  });
+  console.log(STAMPS);
 
   res.status(200).json({
     status: 'success',
@@ -562,44 +554,147 @@ exports.findingTransactions = catchAsync(async (req, res, next) => {
 });
 
 exports.downloadStamp = catchAsync(async (req, res, next) => {
- 
-
-  const halfTrans = await HalfSignTrans.find({status:"Minted"})
-  if(!halfTrans){
+  const halfTrans = await HalfSignTrans.find({ status: 'Minted' });
+  if (!halfTrans) {
     next(new appError('You Dont have any Transaction Yet', 404));
   }
- let STAMPS =  halfTrans.filter((a)=>{
- return a.id == req.params.id
-  })
-  const stampDetails = atob( STAMPS[0].transaction.stampDetail)
+  let STAMPS = halfTrans.filter((a) => {
+    return a.id == req.params.id;
+  });
+  let stampDetails = atob(STAMPS[0].transaction.stampDetail).replace(
+    /(<([^>]+)>)/gi,
+    ' '
+  );
+  // const regex =
+  //   /(\n|^)(Person's Name|Father Name|Cnic No|Description|Date|"I declare the oath that whatever I am going to write shall be the whole truth."|Seller's Signature|Buyer's Public Address|First Witness Public:|Address:|Second Witness:|Public Address:|Lawyer's Signature|Submit)/g;
 
+  const regex =
+    /(Person's Name:|Father Name:|Cnic No:|Description:|Issue Date:|(Second Party:Buyer)|"I declare the oath that whatever I am going to write shall be the whole truth."|Seller's Signature:|Buyer's Public Address:|First Witness Public:|Address:|Second Witness:|Public Address:|Lawyer's Signature:)/g;
+
+  const a1 = [
+    "Person's Name:",
+    'Father Name:',
+    'Cnic No:',
+    'Description:',
+    'Issue Date:',
+    '(Second Party:Buyer)',
+    'I declare the oath that whatever I am going to write shall be the whole truth.',
+    "Seller's Signature:",
+    "Buyer's Public Address",
+    'First Witness Public Address:',
+    'Second Witness Public Address:',
+    "Lawyer's Signature",
+  ];
 
   const doc = new PDFDocument();
 
+  let i = [];
+  for (let index = 0; index < a1.length; index++) {
+    i.push(stampDetails.indexOf(a1[index]));
+    // stampDetails[inedx].push('---------------');
+  }
+  i.sort((a, b) => a - b);
+  let m = 0;
+  let element = [];
+  for (let index = 0; index < stampDetails.length; index++) {
+    element = element + stampDetails[index];
+    if (index + 3 >= i[m]) {
+      if (index > i[11]) {
+        element = element + STAMPS[0].transaction.LawyerPublic;
+      } else if (index > i[10]) {
+        element = element + STAMPS[0].transaction.v2publicKey;
+      } else if (index > i[9]) {
+        element = element + STAMPS[0].transaction.v1publicKey;
+      } else if (index > i[8]) {
+        element = element + STAMPS[0].transaction.toAddress;
+      } else if (index > i[7]) {
+        console.log('lawyer');
+        element = element + STAMPS[0].transaction.fromAddress;
+      }
+      doc.text(element.toString());
+      doc.moveDown();
+      element = '';
+      m++;
+    }
+    if (index > i[i.length - 1]) {
+      if (index == stampDetails.length - 16) {
+        element = element + STAMPS[0].transaction.LawyerPublic;
+        doc.text(element.toString());
+        console.log(element.toString());
+        doc.moveDown();
+        element = '';
+      }
+    }
+  }
 
-  doc.fontSize(16).text(stampDetails);
+  const qrName = `QRcode/${req.params.id}.png`;
+  QRCode.toFile(
+    qrName,
+    `http://localhost:3000/viewStamp/${req.params.id}`,
+    (err) => {
+      console.log(err);
+      if (err) throw err;
+    }
+  );
+
+  console.log('1');
+  doc.image(`${qrName}`);
+  // doc.image(`1.png`);
+  // condoc.buffer
+  console.log('2');
+
+  // doc.pipe(fs.createWriteStream('example.pdf'));
+  doc.end();
+  console.log('3');
+
+  res.setHeader('Content-disposition', `attachment; filename=Bilal.pdf`);
+
+  console.log('4');
+  res.setHeader('Content-type', 'application/pdf');
+
+  console.log('5');
+  // const filestream = fs.createReadStream(filePath);
+  doc.pipe(res);
+
+  // console.log(a1.length);
+
+  // const outputString = stampDetails.includes("Person's Name")
+  //   ? stampDetails.replace("Person's Name", '\n')
+
+  // console.log(stampDetails.replace("Person's Name", "\n Person's Name"));
+
+  // let outputString = stampDetails.replace(regex, '\n$1');
+
+  // stampDetails = stampDetails.replace(
+  //   /\n(?=Person's Name:|Father Name:|Cnic No:|Description:|Date:|"I declare the oath that whatever I am going to write shall be the whole truth."|Seller's Signature:|Buyer's Public Address:|First Witness Public: Address:|Second Witness:|Public Address:|Lawyer's Signature:|Submit)/g,
+  //   '<br>'
+  // );
+
+  // console.log(outputString);
+
+  // doc.fontSize(14).text(outputString);
 
   // create a write stream to save the PDF
-  const writeStream = fs.createWriteStream('example1111.pdf');
-  
+  // const writeStream = fs.createWriteStream('AggrementStamp.pdf');
+
   // pipe the PDF document to the write stream
-  doc.pipe(writeStream);
-  
+  // doc.pipe(writeStream);
+
   // end the document
-  doc.end();
+  // doc.end();
 
-writeStream.on('finish', () => {
-  const filePath = `example1111.pdf`;
-  const fileName = 'example1111.pdf';
-  res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
-  res.setHeader('Content-type', 'application/pdf');
-  const filestream = fs.createReadStream(filePath);
-  filestream.pipe(res);
-});
+  // writeStream.on('finish', () => {
+  //   const filePath = `example1111.pdf`;
+  //   const fileName = 'example1111.pdf';
+  //   res.setHeader('Content-disposition', `attachment; filename="${fileName}"`);
+  //   res.setHeader('Content-type', 'application/pdf');
+  //   const filestream = fs.createReadStream(filePath);
+  //   filestream.pipe(res);
+  // });
 
-// res.status(200).json({
-//   status: 'success',
+  // res.status(200).json({
+  //   status: 'success',
 
-//   messages: "PDF generated"
-// });
+  //   messages: "PDF generated"
+  // });
 });
