@@ -79,11 +79,9 @@ const userSchema = mongoose.Schema({
       ec = new EC('secp256k1');
       return btoa(ec.genKeyPair().getPrivate('hex'));
     },
-    unique: true,
   },
   publicKey: {
     type: String,
-    unique: true,
   },
   verificationCode: {
     type: Number,
@@ -114,13 +112,11 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.pre('save', async function (next) {
-//   console.log("waja")
-  if (!this.isModified('privateKey')) return next();
-// console.log("Waja2")
+  if (this.isModified('privateKey')) return next();
+  // console.log("Waja2")
   this.publicKey = ec.keyFromPrivate(atob(this.privateKey)).getPublic('hex');
 });
 
-// method Check is password is matches the input password or not
 userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword

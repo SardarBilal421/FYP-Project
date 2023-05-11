@@ -249,7 +249,7 @@ exports.sendTrans = catchAsync(async (req, res, next) => {
 exports.sendAuthEmail = catchAsync(async (req, res, next) => {
   const message = `Please open the given link and compelete
    Required steps for verficiation. \n http://localhost:3000/mediarecorder \n <h1> 
-   Here is you Stamp Click this link</h1>\n http://localhost:3000/viewStamp`;
+   Here is you Stamp Click this link</h1>\n http://localhost:3000/viewStamp/${req.body.id} `;
 
   try {
     await sendEmail({
